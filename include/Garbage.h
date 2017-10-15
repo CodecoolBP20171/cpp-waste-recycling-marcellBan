@@ -5,7 +5,7 @@
 
 class Garbage {
 public:
-    Garbage(const std::string& name);
+    explicit Garbage(const std::string& name);
     const std::string& getName() const;
 private:
     std::string name;

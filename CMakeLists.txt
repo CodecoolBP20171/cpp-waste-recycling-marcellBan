@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.2)
-project(Garbage)
+project(recycling)
 set(CMAKE_CXX_STANDARD 11)
 
 # Download and unpack googletest at configure time
@@ -35,10 +35,10 @@ endif ()
 
 
 # google test unit tests
-set(TEST_SOURCES src/Garbage.cpp include/Garbage.h tests/DustbinTests.cpp)
+set(TEST_SOURCES src/Garbage.cpp include/Garbage.h tests/DustbinTests.cpp src/PaperGarbage.cpp include/PaperGarbage.h src/PlasticGarbage.cpp include/PlasticGarbage.h include/DustbinErrors.hpp src/Dustbin.cpp include/Dustbin.h)
 add_executable(DustbinTest ${TEST_SOURCES})
 target_link_libraries(DustbinTest gtest_main)
 
 # release build
-set(RELEASE_SOURCES src/Garbage.cpp include/Garbage.h)
+set(RELEASE_SOURCES src/Garbage.cpp include/Garbage.h src/PaperGarbage.cpp include/PaperGarbage.h src/PlasticGarbage.cpp include/PlasticGarbage.h include/DustbinErrors.hpp src/Dustbin.cpp include/Dustbin.h)
 add_library(recycling ${RELEASE_SOURCES})
