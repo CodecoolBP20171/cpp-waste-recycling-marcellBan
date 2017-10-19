@@ -126,10 +126,17 @@ namespace {
         EXPECT_EQ(extendedCap, db.getCurrentMetalCapacity());
         EXPECT_EQ(extendedCap, db.getCurrentBottlecapCapacity());
     }
-    
+
     TEST_F(Dustbin9kTest, BottleCapException){
         auto boCap = std::unique_ptr<BottleCap>(new BottleCap("red"));
         EXPECT_THROW(db.throwOutBottleCap(boCap), BottleCapException);
+    }
+
+    TEST_F(Dustbin9kTest, EmptyDustbin) {
+        EXPECT_NO_THROW(db.throwOutGarbage(houseWaste));
+        EXPECT_EQ(1, db.getGarbageCount());
+        EXPECT_NO_THROW(db.emptyContents());
+        EXPECT_TRUE(db.isEmpty());
     }
 }
 

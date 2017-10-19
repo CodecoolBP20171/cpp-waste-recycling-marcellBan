@@ -5,7 +5,7 @@
 
 class BottleCap {
 public:
-    BottleCap(const std::string& color);
+    explicit BottleCap(const std::string& color);
     const std::string& getColor() const;
 private:
     std::string color;

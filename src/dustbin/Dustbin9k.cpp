@@ -32,7 +32,7 @@ void Dustbin9k::emptyContents() {
                     new std::unique_ptr<BottleCap>[INITIAL_CAPACITY]
             );
     bottlecapContent.swap(newBottlecapContent);
-    bottlecapContent = 0;
+    bottlecapIndex = 0;
     currentBottlecapCapacity = INITIAL_CAPACITY;
 }
 
