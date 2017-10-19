@@ -7,5 +7,8 @@
       <file path="$PROJECT_DIR$/src" />
       <file path="$PROJECT_DIR$/tests" />
     </sourceRoots>
+    <excludeRoots>
+      <file path="$PROJECT_DIR$/cmake-build-debug/googletest-src" />
+    </excludeRoots>
   </component>
 </project>

@@ -1,9 +1,10 @@
 #include "gtest/gtest.h"
 #include "../include/dustbin/Dustbin.h"
+#include "../include/dustbin/Dustbin9k.h"
 #include "../include/dustbin/DustbinErrors.hpp"
 
 namespace {
-    // test fixture class
+    // test fixture classes
     class DustbinTest : public ::testing::Test {
     protected:
         Dustbin db;
@@ -18,6 +19,26 @@ namespace {
                   plasticGarbage(new PlasticGarbage("bottle")) {}
 
         virtual ~DustbinTest() {}
+    };
+
+    class Dustbin9kTest : public ::testing::Test {
+    protected:
+        Dustbin9k db;
+        std::unique_ptr<Garbage> houseWaste;
+        std::unique_ptr<PaperGarbage> paperGarbage;
+        std::unique_ptr<PlasticGarbage> plasticGarbage;
+        std::unique_ptr<MetalGarbage> metalGarbage;
+        std::unique_ptr<BottleCap> bottleCap;
+
+        Dustbin9kTest()
+                : db("white"),
+                  houseWaste(new Garbage("food remains")),
+                  paperGarbage(new PaperGarbage("news paper")),
+                  plasticGarbage(new PlasticGarbage("bottle")),
+                  metalGarbage(new MetalGarbage("can")),
+                  bottleCap(new BottleCap("pink")) {}
+
+        virtual ~Dustbin9kTest() {}
     };
 
     // tests
@@ -52,7 +73,7 @@ namespace {
     }
 
     TEST_F(DustbinTest, AutomaticExpansion) {
-        for (auto i = 0; i < 10; ++i) {
+        for (auto i = 0; i < Dustbin::INITIAL_CAPACITY; ++i) {
             auto garbage = std::unique_ptr<Garbage>(new Garbage(std::to_string(i)));
             auto paGarbage = std::unique_ptr<PaperGarbage>(new PaperGarbage(std::to_string(i)));
             auto plGarbage = std::unique_ptr<PlasticGarbage>(new PlasticGarbage(std::to_string(i)));
@@ -80,6 +101,35 @@ namespace {
     TEST_F(DustbinTest, ContentErrors) {
         EXPECT_THROW(db.throwOutPaperGarbage(paperGarbage), DustbinContentError);
         EXPECT_THROW(db.throwOutPlasticGarbage(plasticGarbage), DustbinContentError);
+    }
+
+    TEST_F(Dustbin9kTest, AddingMetalAndBottleCap) {
+        EXPECT_NO_THROW(db.throwOutMetalGarbage(metalGarbage));
+        EXPECT_EQ(1, db.getMetalCount());
+        EXPECT_NO_THROW(db.throwOutBottleCap(bottleCap));
+        EXPECT_EQ(1, db.getBottlecapCount());
+    }
+
+    TEST_F(Dustbin9kTest, AutomaticExpansion) {
+        for (auto i = 0; i < Dustbin9k::INITIAL_CAPACITY; ++i) {
+            auto meGarbage = std::unique_ptr<MetalGarbage>(new MetalGarbage(std::to_string(i)));
+            auto boCap = std::unique_ptr<BottleCap>(new BottleCap("pink"));
+            db.throwOutMetalGarbage(meGarbage);
+            db.throwOutBottleCap(boCap);
+        }
+        auto baseCap = Dustbin9k::INITIAL_CAPACITY;
+        EXPECT_EQ(baseCap, db.getCurrentMetalCapacity());
+        EXPECT_EQ(baseCap, db.getCurrentBottlecapCapacity());
+        db.throwOutMetalGarbage(metalGarbage);
+        db.throwOutBottleCap(bottleCap);
+        auto extendedCap = Dustbin9k::INITIAL_CAPACITY + Dustbin9k::CAPACITY_STEP;
+        EXPECT_EQ(extendedCap, db.getCurrentMetalCapacity());
+        EXPECT_EQ(extendedCap, db.getCurrentBottlecapCapacity());
+    }
+    
+    TEST_F(Dustbin9kTest, BottleCapException){
+        auto boCap = std::unique_ptr<BottleCap>(new BottleCap("red"));
+        EXPECT_THROW(db.throwOutBottleCap(boCap), BottleCapException);
     }
 }
 
