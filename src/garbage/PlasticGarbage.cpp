@@ -1,4 +1,4 @@
-#include "../include/PlasticGarbage.h"
+#include "../../include/garbage/PlasticGarbage.h"
 
 PlasticGarbage::PlasticGarbage(const std::string& name) : Garbage(name), isClean(false) {
 }

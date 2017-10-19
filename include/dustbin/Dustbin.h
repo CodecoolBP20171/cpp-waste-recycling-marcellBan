@@ -3,9 +3,9 @@
 
 #include <bits/unique_ptr.h>
 
-#include "Garbage.h"
-#include "PaperGarbage.h"
-#include "PlasticGarbage.h"
+#include "../garbage/Garbage.h"
+#include "../garbage/PaperGarbage.h"
+#include "../garbage/PlasticGarbage.h"
 
 class Dustbin {
 public:
@@ -15,8 +15,8 @@ public:
     void throwOutGarbage(std::unique_ptr<Garbage>& garbage);
     void throwOutPaperGarbage(std::unique_ptr<PaperGarbage>& paperGarbage);
     void throwOutPlasticGarbage(std::unique_ptr<PlasticGarbage>& plasticGarbage);
-    void emptyContents();
-    bool isEmpty() const;
+    virtual void emptyContents();
+    virtual bool isEmpty() const;
     const std::string& getColor() const;
     size_t getGarbageCount() const;
     size_t getPaperCount() const;
@@ -25,12 +25,12 @@ public:
     size_t getCurrentPaperCapacity() const;
     size_t getCurrentPlasticCapacity() const;
 private:
-    std::string color;
     size_t garbageIndex, paperIndex, plasticIndex;
     size_t currentGarbageCapacity, currentPaperCapacity, currentPlasticCapacity;
     std::unique_ptr<std::unique_ptr<PaperGarbage>[]> paperContent;
     std::unique_ptr<std::unique_ptr<PlasticGarbage>[]> plasticContent;
     std::unique_ptr<std::unique_ptr<Garbage>[]> houseWasteContent;
+    std::string color;
 };
 
 #endif //RECYCLING_DUSTBIN_H

@@ -1,4 +1,4 @@
-#include "../include/Garbage.h"
+#include "../../include/garbage/Garbage.h"
 
 Garbage::Garbage(const std::string& name) : name(name) {}
 

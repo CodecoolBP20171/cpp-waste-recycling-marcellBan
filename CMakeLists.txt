@@ -35,10 +35,10 @@ endif ()
 
 
 # google test unit tests
-set(TEST_SOURCES src/Garbage.cpp include/Garbage.h tests/DustbinTests.cpp src/PaperGarbage.cpp include/PaperGarbage.h src/PlasticGarbage.cpp include/PlasticGarbage.h include/DustbinErrors.hpp src/Dustbin.cpp include/Dustbin.h)
+set(TEST_SOURCES src/garbage/Garbage.cpp include/garbage/Garbage.h tests/DustbinTests.cpp src/garbage/PaperGarbage.cpp include/garbage/PaperGarbage.h src/garbage/PlasticGarbage.cpp include/garbage/PlasticGarbage.h include/dustbin/DustbinErrors.hpp src/dustbin/Dustbin.cpp include/dustbin/Dustbin.h src/dustbin/Dustbin9k.cpp include/dustbin/Dustbin9k.h src/garbage/MetalGarbage.cpp include/garbage/MetalGarbage.h src/garbage/BottleCap.cpp include/garbage/BottleCap.h)
 add_executable(DustbinTest ${TEST_SOURCES})
 target_link_libraries(DustbinTest gtest_main)
 
 # release build
-set(RELEASE_SOURCES src/Garbage.cpp include/Garbage.h src/PaperGarbage.cpp include/PaperGarbage.h src/PlasticGarbage.cpp include/PlasticGarbage.h include/DustbinErrors.hpp src/Dustbin.cpp include/Dustbin.h)
+set(RELEASE_SOURCES src/garbage/Garbage.cpp include/garbage/Garbage.h src/garbage/PaperGarbage.cpp include/garbage/PaperGarbage.h src/garbage/PlasticGarbage.cpp include/garbage/PlasticGarbage.h include/dustbin/DustbinErrors.hpp src/dustbin/Dustbin.cpp include/dustbin/Dustbin.h src/dustbin/Dustbin9k.cpp include/dustbin/Dustbin9k.h src/garbage/MetalGarbage.cpp include/garbage/MetalGarbage.h src/garbage/BottleCap.cpp include/garbage/BottleCap.h)
 add_library(recycling ${RELEASE_SOURCES})

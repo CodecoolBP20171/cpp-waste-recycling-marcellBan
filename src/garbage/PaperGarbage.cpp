@@ -1,4 +1,4 @@
-#include "../include/PaperGarbage.h"
+#include "../../include/garbage/PaperGarbage.h"
 
 PaperGarbage::PaperGarbage(const std::string& name) : Garbage(name), isSqueezed(false) {}
 

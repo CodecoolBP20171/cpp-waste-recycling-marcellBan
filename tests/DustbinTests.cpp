@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "../include/Dustbin.h"
-#include "../include/DustbinErrors.hpp"
+#include "../include/dustbin/Dustbin.h"
+#include "../include/dustbin/DustbinErrors.hpp"
 
 namespace {
     // test fixture class

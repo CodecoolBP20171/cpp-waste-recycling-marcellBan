@@ -1,5 +1,5 @@
-#include "../include/Dustbin.h"
-#include "../include/DustbinErrors.hpp"
+#include "../../include/dustbin/Dustbin.h"
+#include "../../include/dustbin/DustbinErrors.hpp"
 
 Dustbin::Dustbin(const std::string& color)
         : color(color),

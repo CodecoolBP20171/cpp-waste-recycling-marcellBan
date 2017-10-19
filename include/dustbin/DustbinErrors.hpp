@@ -10,6 +10,13 @@ public:
     }
 };
 
+class BottleCapException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "I want pink bottlecaps!";
+    }
+};
+
 class DustbinFullError : public std::exception {
 public:
     const char* what() const noexcept override {
