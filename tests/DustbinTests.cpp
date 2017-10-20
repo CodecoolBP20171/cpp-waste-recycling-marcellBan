@@ -13,7 +13,7 @@ namespace {
         std::unique_ptr<PlasticGarbage> plasticGarbage;
 
         DustbinTest()
-                : db("white"),
+                : db("white", 30),
                   houseWaste(new Garbage("food remains")),
                   paperGarbage(new PaperGarbage("news paper")),
                   plasticGarbage(new PlasticGarbage("bottle")) {}
@@ -31,7 +31,7 @@ namespace {
         std::unique_ptr<BottleCap> bottleCap;
 
         Dustbin9kTest()
-                : db("white"),
+                : db("white", 30),
                   houseWaste(new Garbage("food remains")),
                   paperGarbage(new PaperGarbage("news paper")),
                   plasticGarbage(new PlasticGarbage("bottle")),

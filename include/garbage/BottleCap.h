@@ -7,6 +7,7 @@ class BottleCap {
 public:
     explicit BottleCap(const std::string& color);
     const std::string& getColor() const;
+    static const size_t weight = 1;
 private:
     std::string color;
 };

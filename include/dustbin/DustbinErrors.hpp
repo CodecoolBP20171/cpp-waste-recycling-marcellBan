@@ -17,7 +17,7 @@ public:
     }
 };
 
-class DustbinFullError : public std::exception {
+class DustbinIsFull : public std::exception {
 public:
     const char* what() const noexcept override {
         return "Dustbin is full.";

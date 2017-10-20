@@ -1,8 +1,10 @@
 #include "../../include/dustbin/Dustbin.h"
 #include "../../include/dustbin/DustbinErrors.hpp"
 
-Dustbin::Dustbin(const std::string& color)
+Dustbin::Dustbin(const std::string& color, size_t maxWeight)
         : color(color),
+          maxWeight(maxWeight),
+          weight(0),
           paperContent(new std::unique_ptr<PaperGarbage>[INITIAL_CAPACITY]),
           plasticContent(new std::unique_ptr<PlasticGarbage>[INITIAL_CAPACITY]),
           houseWasteContent(new std::unique_ptr<Garbage>[INITIAL_CAPACITY]),
@@ -14,53 +16,69 @@ Dustbin::Dustbin(const std::string& color)
           currentPlasticCapacity(INITIAL_CAPACITY) {}
 
 void Dustbin::throwOutGarbage(std::unique_ptr<Garbage>& garbage) {
-    if (garbageIndex >= currentGarbageCapacity) {
-        currentGarbageCapacity += CAPACITY_STEP;
-        auto newHouseWasteContent =
-                std::unique_ptr<std::unique_ptr<Garbage>[]>(
-                        new std::unique_ptr<Garbage>[currentGarbageCapacity]
-                );
-        for (auto i = 0; i < garbageIndex; ++i) newHouseWasteContent[i] = std::move(houseWasteContent[i]);
-        houseWasteContent.swap(newHouseWasteContent);
+    if (weight + garbage->weight <= maxWeight) {
+        if (garbageIndex >= currentGarbageCapacity) {
+            currentGarbageCapacity += CAPACITY_STEP;
+            auto newHouseWasteContent =
+                    std::unique_ptr<std::unique_ptr<Garbage>[]>(
+                            new std::unique_ptr<Garbage>[currentGarbageCapacity]
+                    );
+            for (auto i = 0; i < garbageIndex; ++i) newHouseWasteContent[i] = std::move(houseWasteContent[i]);
+            houseWasteContent.swap(newHouseWasteContent);
+        }
+        weight += garbage->weight;
+        houseWasteContent[garbageIndex++] = std::move(garbage);
+    } else {
+        throw DustbinIsFull();
     }
-    houseWasteContent[garbageIndex++] = std::move(garbage);
 }
 
 void Dustbin::throwOutPaperGarbage(std::unique_ptr<PaperGarbage>& paperGarbage) {
-    if (paperGarbage->IsSqueezed()) {
-        if (paperIndex >= currentPaperCapacity) {
-            currentPaperCapacity += CAPACITY_STEP;
-            auto newPaperContent =
-                    std::unique_ptr<std::unique_ptr<PaperGarbage>[]>(
-                            new std::unique_ptr<PaperGarbage>[currentPaperCapacity]
-                    );
-            for (auto i = 0; i < paperIndex; ++i) newPaperContent[i] = std::move(paperContent[i]);
-            paperContent.swap(newPaperContent);
+    if (weight + paperGarbage->weight <= maxWeight) {
+        if (paperGarbage->IsSqueezed()) {
+            if (paperIndex >= currentPaperCapacity) {
+                currentPaperCapacity += CAPACITY_STEP;
+                auto newPaperContent =
+                        std::unique_ptr<std::unique_ptr<PaperGarbage>[]>(
+                                new std::unique_ptr<PaperGarbage>[currentPaperCapacity]
+                        );
+                for (auto i = 0; i < paperIndex; ++i) newPaperContent[i] = std::move(paperContent[i]);
+                paperContent.swap(newPaperContent);
+            }
+            weight += paperGarbage->weight;
+            paperContent[paperIndex++] = std::move(paperGarbage);
+        } else {
+            throw DustbinContentError();
         }
-        paperContent[paperIndex++] = std::move(paperGarbage);
     } else {
-        throw DustbinContentError();
+        throw DustbinIsFull();
     }
 }
 
 void Dustbin::throwOutPlasticGarbage(std::unique_ptr<PlasticGarbage>& plasticGarbage) {
-    if (plasticGarbage->IsClean()) {
-        if (plasticIndex >= currentPlasticCapacity) {
-            currentPlasticCapacity += CAPACITY_STEP;
-            auto newPlasticContent =
-                    std::unique_ptr<std::unique_ptr<PlasticGarbage>[]>(
-                            new std::unique_ptr<PlasticGarbage>[currentPlasticCapacity]
-                    );
-            for (auto i = 0; i < plasticIndex; ++i) newPlasticContent[i] = std::move(plasticContent[i]);
-            plasticContent.swap(newPlasticContent);
+    if (weight + plasticGarbage->weight <= maxWeight) {
+        if (plasticGarbage->IsClean()) {
+            if (plasticIndex >= currentPlasticCapacity) {
+                currentPlasticCapacity += CAPACITY_STEP;
+                auto newPlasticContent =
+                        std::unique_ptr<std::unique_ptr<PlasticGarbage>[]>(
+                                new std::unique_ptr<PlasticGarbage>[currentPlasticCapacity]
+                        );
+                for (auto i = 0; i < plasticIndex; ++i) newPlasticContent[i] = std::move(plasticContent[i]);
+                plasticContent.swap(newPlasticContent);
+            }
+            weight += plasticGarbage->weight;
+            plasticContent[plasticIndex++] = std::move(plasticGarbage);
+        } else {
+            throw DustbinContentError();
         }
-        plasticContent[plasticIndex++] = std::move(plasticGarbage);
     } else {
-        throw DustbinContentError();
+        throw DustbinIsFull();
     }
 }
 
 void Dustbin::emptyContents() {
+    weight = 0;
     auto newHouseWasteContent =
             std::unique_ptr<std::unique_ptr<Garbage>[]>(
                     new std::unique_ptr<Garbage>[INITIAL_CAPACITY]
@@ -115,7 +133,5 @@ size_t Dustbin::getCurrentPlasticCapacity() const {
 }
 
 bool Dustbin::isEmpty() const {
-    return garbageIndex == 0 &&
-           paperIndex == 0 &&
-           plasticIndex == 0;
+    return weight == 0;
 }

@@ -8,6 +8,7 @@ public:
     explicit PaperGarbage(const std::string& name);
     void squeeze();
     bool IsSqueezed() const;
+    static const size_t weight = 2;
 private:
     bool isSqueezed;
 };

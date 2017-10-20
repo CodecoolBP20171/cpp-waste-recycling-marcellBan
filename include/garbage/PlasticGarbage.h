@@ -8,6 +8,7 @@ public:
     explicit PlasticGarbage(const std::string& name);
     void clean();
     bool IsClean() const;
+    static const size_t weight = 3;
 private:
     bool isClean;
 };

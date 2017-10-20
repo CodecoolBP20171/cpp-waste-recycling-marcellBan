@@ -7,11 +7,10 @@
 
 class Dustbin9k : public Dustbin {
 public:
-    explicit Dustbin9k(const std::string& color);
+    explicit Dustbin9k(const std::string& color, size_t maxWeight);
     void throwOutMetalGarbage(std::unique_ptr<MetalGarbage>& metalGarbage);
     void throwOutBottleCap(std::unique_ptr<BottleCap>& bottleCap);
     void emptyContents() override;
-    bool isEmpty() const override;
     size_t getMetalCount() const;
     size_t getBottlecapCount() const;
     size_t getCurrentMetalCapacity() const;
