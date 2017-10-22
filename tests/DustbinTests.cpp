@@ -13,7 +13,7 @@ namespace {
         std::unique_ptr<PlasticGarbage> plasticGarbage;
 
         DustbinTest()
-                : db("white", 30),
+                : db("white", 300),
                   houseWaste(new Garbage("food remains")),
                   paperGarbage(new PaperGarbage("news paper")),
                   plasticGarbage(new PlasticGarbage("bottle")) {}
@@ -31,7 +31,7 @@ namespace {
         std::unique_ptr<BottleCap> bottleCap;
 
         Dustbin9kTest()
-                : db("white", 30),
+                : db("white", 300),
                   houseWaste(new Garbage("food remains")),
                   paperGarbage(new PaperGarbage("news paper")),
                   plasticGarbage(new PlasticGarbage("bottle")),
@@ -137,6 +137,14 @@ namespace {
         EXPECT_EQ(1, db.getGarbageCount());
         EXPECT_NO_THROW(db.emptyContents());
         EXPECT_TRUE(db.isEmpty());
+    }
+
+    TEST_F(Dustbin9kTest, DustbinFull){
+        for (auto i = 0; i < 30; ++i) {
+            auto meGarbage = std::unique_ptr<MetalGarbage>(new MetalGarbage(std::to_string(i)));
+            db.throwOutMetalGarbage(meGarbage);
+        }
+        EXPECT_THROW(db.throwOutMetalGarbage(metalGarbage), DustbinIsFull);
     }
 }
 
